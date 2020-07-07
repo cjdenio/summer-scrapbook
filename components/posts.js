@@ -13,8 +13,8 @@ const Posts = ({ posts = [] }) => [
     className="masonry-posts"
     columnClassName="masonry-posts-column"
   >
-    {posts.map(post => (
-      <Post key={post.id} {...post} />
+    {posts.map((post, index) => (
+      <Post key={post.id} index={index} {...post} />
     ))}
   </Masonry>,
   <style jsx global key="masonry-style">{`

@@ -20,12 +20,13 @@ const Post = ({
   mux = [],
   postedAt,
   scrollPosition,
-  muted = false
+  muted = false,
+  index = 0
 }) => (
   <section
     className="post"
     id={id}
-    style={muted ? { opacity: muted, pointerEvents: 'none' } : null}
+    style={user.css ? { backgroundColor: 'red' } : null}
   >
     <Link href="/[profile]" as={`/${user.username}`}>
       <a className="post-header">
@@ -78,39 +79,41 @@ const Post = ({
         )}
       </a>
     </Link>
-    <Content>{text}</Content>
+    <Content>
+      {text}
+    </Content>
     {attachments.length > 0 && (
       <div className="post-attachments">
-        {filter(attachments, a => a?.type?.toString().startsWith('image')).map(
-          img => (
-            <a
-              key={img.url}
-              href={img.thumbnails?.full?.url || img.url}
-              target="_blank"
-              className="post-attachment"
-            >
-              <Image
-                alt={img.filename}
-                src={img.thumbnails?.large?.url || img.url}
-                placeholderSrc={img.thumbnails?.small?.url || img.url}
-                width={img.thumbnails?.large?.width}
-                height={img.thumbnails?.large?.height}
-              />
-            </a>
-          )
-        )}
-        {filter(attachments, a => a?.type?.toString().startsWith('audio')).map(
-          aud => (
-            <audio
-              key={aud.url}
-              className="post-attachment"
-              src={aud.url}
-              controls
-              preload="metadata"
+        {filter(attachments, (a) =>
+          a?.type?.toString().startsWith('image')
+        ).map((img) => (
+          <a
+            key={img.url}
+            href={img.thumbnails?.full?.url || img.url}
+            target="_blank"
+            className="post-attachment"
+          >
+            <Image
+              alt={img.filename}
+              src={img.thumbnails?.large?.url || img.url}
+              placeholderSrc={img.thumbnails?.small?.url || img.url}
+              width={img.thumbnails?.large?.width}
+              height={img.thumbnails?.large?.height}
             />
-          )
-        )}
-        {mux.map(id => (
+          </a>
+        ))}
+        {filter(attachments, (a) =>
+          a?.type?.toString().startsWith('audio')
+        ).map((aud) => (
+          <audio
+            key={aud.url}
+            className="post-attachment"
+            src={aud.url}
+            controls
+            preload="metadata"
+          />
+        ))}
+        {mux.map((id) => (
           <Video key={id} mux={id} />
         ))}
       </div>
